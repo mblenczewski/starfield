@@ -56,13 +56,13 @@ str_view_equal(struct str_view a, struct str_view b) {
 #define MIN(a, b) ((a) < (b) ? (a) : (b))
 #define MAX(a, b) ((a) > (b) ? (a) : (b))
 
-#define VERIFY_NOT_REACHED(...)							\
-do {										\
-	fprintf(stderr, "%s:%d:%s: VERIFY_NOT_REACHED()", __FILE__, __LINE__, __func__);\
-	fprintf(stderr, __VA_ARGS__);						\
-	fprintf(stderr, "\n");							\
-	fflush(stderr);								\
-	abort();								\
+#define VERIFY_NOT_REACHED(...) \
+do { \
+	fprintf(stderr, "%s:%d:%s: VERIFY_NOT_REACHED()", __FILE__, __LINE__, __func__); \
+	fprintf(stderr, __VA_ARGS__); \
+	fprintf(stderr, "\n"); \
+	fflush(stderr); \
+	abort(); \
 } while (0);
 
 struct mem_stream {
