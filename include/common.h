@@ -199,7 +199,7 @@ static inline void *
 mem_pool_aligned_alloc(struct mem_pool *self, u64 alignment, u64 size) {
 	assert(self);
 	assert(alignment);
-	assert(alignment % 2 == 0);
+	assert(alignment == 1 || alignment % 2 == 0);
 
 	u64 alignment_mask = alignment - 1;
 	u64 aligned_start_len = (self->len + alignment_mask) & ~alignment_mask;
