@@ -94,7 +94,7 @@ mem_stream_headptr(struct mem_stream *self) {
 }
 
 static inline bool
-mem_stream_skip(struct mem_stream *self, size_t len) {
+mem_stream_skip(struct mem_stream *self, u64 len) {
 	assert(self);
 
 	if (self->len - self->cur < len)
@@ -106,7 +106,7 @@ mem_stream_skip(struct mem_stream *self, size_t len) {
 }
 
 static inline bool
-mem_stream_peek(struct mem_stream *self, size_t off, void *buf, size_t len) {
+mem_stream_peek(struct mem_stream *self, u64 off, void *buf, u64 len) {
 	assert(self);
 	assert(buf);
 
@@ -119,7 +119,7 @@ mem_stream_peek(struct mem_stream *self, size_t off, void *buf, size_t len) {
 }
 
 static inline bool
-mem_stream_consume(struct mem_stream *self, void *buf, size_t len) {
+mem_stream_consume(struct mem_stream *self, void *buf, u64 len) {
 	assert(self);
 	assert(buf);
 
@@ -130,15 +130,13 @@ mem_stream_consume(struct mem_stream *self, void *buf, size_t len) {
 #define MiB 1024 * KiB
 #define GiB 1024 * MiB
 
-#define MEM_POOL_BLOCK_SIZE 4 * MiB
-
 struct mem_pool {
 	u8 *ptr;
 	u64 cap, len;
 };
 
 static inline bool
-mem_pool_resize(struct mem_pool *self, size_t capacity) {
+mem_pool_resize(struct mem_pool *self, u64 capacity) {
 	assert(self);
 
 	u8 *ptr = realloc(self->ptr, capacity);
@@ -151,7 +149,7 @@ mem_pool_resize(struct mem_pool *self, size_t capacity) {
 }
 
 static inline bool
-mem_pool_init(struct mem_pool *self, size_t capacity) {
+mem_pool_init(struct mem_pool *self, u64 capacity) {
 	assert(self);
 
 	self->ptr = NULL;
@@ -175,7 +173,7 @@ mem_pool_reset(struct mem_pool *self) {
 }
 
 static inline bool
-mem_pool_prealloc(struct mem_pool *self, size_t size) {
+mem_pool_prealloc(struct mem_pool *self, u64 size) {
 	assert(self);
 
 	if (self->cap < self->len + size && !mem_pool_resize(self, self->len + size))
@@ -185,7 +183,7 @@ mem_pool_prealloc(struct mem_pool *self, size_t size) {
 }
 
 static inline void *
-mem_pool_alloc(struct mem_pool *self, size_t size) {
+mem_pool_alloc(struct mem_pool *self, u64 size) {
 	assert(self);
 
 	if (!mem_pool_prealloc(self, size))
@@ -198,14 +196,14 @@ mem_pool_alloc(struct mem_pool *self, size_t size) {
 }
 
 static inline void *
-mem_pool_aligned_alloc(struct mem_pool *self, size_t alignment, size_t size) {
+mem_pool_aligned_alloc(struct mem_pool *self, u64 alignment, u64 size) {
 	assert(self);
 	assert(alignment);
 	assert(alignment % 2 == 0);
 
-	size_t alignment_mask = alignment - 1;
-	size_t aligned_start_len = (self->len + alignment_mask) & ~alignment_mask;
-	size_t padding = aligned_start_len - self->len;
+	u64 alignment_mask = alignment - 1;
+	u64 aligned_start_len = (self->len + alignment_mask) & ~alignment_mask;
+	u64 padding = aligned_start_len - self->len;
 
 	if (!mem_pool_prealloc(self, padding + size))
 		return NULL;
