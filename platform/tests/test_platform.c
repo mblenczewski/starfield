@@ -6,7 +6,8 @@
 #include "test.h"
 #include "platform.h"
 
-s32 test_example(void) {
+s32
+test_example(void) {
 	s32 a = 42;
 
 	TEST_EXPECT(a + 2 == 44, "a + 2 != 44")
