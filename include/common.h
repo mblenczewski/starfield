@@ -233,14 +233,4 @@ mem_pool_aligned_alloc(struct mem_pool *self, u64 alignment, u64 size) {
 	 ? (absptr_ty)((u8 *)(base) + RELPTR_DEC(relptr_ty, relptr)) \
 	 : NULL)
 
-#define OFFPTR_NULL (-1)
-
-#define OFFPTR_ABS2OFF(absptr_ty, offptr_ty, base, absptr) \
-	((offptr_ty)((absptr) - (absptr_ty)(base)))
-
-#define OFFPTR_OFF2ABS(absptr_ty, offptr_ty, base, offptr) \
-	((offptr) < (offptr_ty)OFFPTR_NULL \
-	 ? ((absptr_ty)(base) + (offptr_ty)offptr) \
-	 : NULL)
-
 #endif /* COMMON_H */
